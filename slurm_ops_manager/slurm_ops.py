@@ -146,34 +146,39 @@ class SlurmManager(Object):
         if not type(slurm_config) == dict:
             raise TypeError("Incorrect type for config.")
 
-        # cgroup config will not always exist. We need to check for
-        # cgroup_config and only write the cgroup.conf if
-        # cgroup_config exists in the slurm_config object.
-        if slurm_config.get('cgroup_config'):
-            cgroup_config = slurm_config['cgroup_config']
-            self._slurm_resource_manager.write_cgroup_conf(cgroup_config)
+        if self._slurm_resoruce_manager.slurm_component == "slurmctld":
+            # cgroup config will not always exist. We need to check for
+            # cgroup_config and only write the cgroup.conf if
+            # cgroup_config exists in the slurm_config object.
+            if slurm_config.get('cgroup_config'):
+                cgroup_config = slurm_config['cgroup_config']
+                self._slurm_resource_manager.write_cgroup_conf(cgroup_config)
 
-        # acct_gather config will not always exist. We need to check for
-        # acct_gather and only write the acct_gather.conf if we have
-        # acct_gather in the slurm_config object.
-        if slurm_config.get('acct_gather'):
-            self._slurm_resource_manager.write_acct_gather_conf(slurm_config)
+            # acct_gather config will not always exist. We need to check for
+            # acct_gather and only write the acct_gather.conf if we have
+            # acct_gather in the slurm_config object.
+            if slurm_config.get('acct_gather'):
+                self._slurm_resource_manager.write_acct_gather_conf(
+                    slurm_config
+                )
 
-        # Write munge.key and restart munged.
-        self._slurm_resource_manager.write_munge_key(slurm_config['munge_key'])
-        self._slurm_resource_manager.restart_munged()
-        sleep(1)
-
-        # Write slurm.conf and restart the slurm component.
-        self._slurm_resource_manager.write_slurm_config(slurm_config)
-        self._slurm_resource_manager.restart_slurm_component()
-        sleep(1)
-
-        if not self._stored.slurm_version_set:
-            self._charm.unit.set_workload_version(
-                self._slurm_resource_manager.slurm_version
+            # Write munge.key and restart munged.
+            self._slurm_resource_manager.write_munge_key(
+                slurm_config['munge_key']
             )
-            self._stored.slurm_version_set = True
+            # self._slurm_resource_manager.restart_munged()
+            # sleep(1)
+
+            # Write slurm.conf and restart the slurm component.
+            self._slurm_resource_manager.write_slurm_config(slurm_config)
+            self._slurm_resource_manager.restart_slurm_component()
+            sleep(1)
+
+            if not self._stored.slurm_version_set:
+                self._charm.unit.set_workload_version(
+                    self._slurm_resource_manager.slurm_version
+                )
+                self._stored.slurm_version_set = True
 
 
 def check_snapd():
