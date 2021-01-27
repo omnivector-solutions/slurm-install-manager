@@ -122,6 +122,18 @@ class SlurmSnapManager(SlurmOpsManagerBase):
         # instead).
         self.setup_system()
 
+    def configure_slurmctld_hostname(self, slurmctld_hostname):
+        """Configure the snap with the slurmctld_hostname."""
+        try:
+            subprocess.call([
+                "snap",
+                "set",
+                "slurm",
+                f"slurmctld.hostname={slurmctld_hostname}",
+            ])
+        except subprocess.CalledProcessError as e:
+            print(f"Trouble setting the slurmctld.hostname - {e}")
+
     def configure_munge_key(self, munge_key):
         """Configure the snap with the munge_key."""
         try:

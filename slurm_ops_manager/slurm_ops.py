@@ -153,6 +153,11 @@ class SlurmManager(Object):
     def configure_munge_key(self, munge_key):
         self._slurm_resource_manager.configure_munge_key(munge_key)
 
+    def configure_slurmctld_hostname(self, slurmctld_hostname):
+        self._slurm_resource_manager.configure_slurmctld_hostname(
+            slurmctld_hostname
+        )
+
     def render_config_and_restart(self, slurm_config) -> None:
         """Render the slurm.conf and munge key, restart slurm and munge."""
         if not type(slurm_config) == dict:
