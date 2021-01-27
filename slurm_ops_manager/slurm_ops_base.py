@@ -298,7 +298,8 @@ class SlurmOpsManagerBase:
                 {**context, **common_config}
             )
         )
-        target.chmod(0o600)
+        if self._slurm_component == "slurmdbd":
+            target.chmod(0o600)
 
     def restart_slurm_component(self):
         """Restart the slurm component."""
