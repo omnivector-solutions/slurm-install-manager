@@ -140,7 +140,7 @@ class SlurmSnapManager(SlurmOpsManagerBase):
             subprocess.call([
                 "snap",
                 "set",
-                "munge",
+                "slurm",
                 f"munge.key={munge_key}",
             ])
         except subprocess.CalledProcessError as e:
