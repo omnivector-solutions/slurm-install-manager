@@ -13,6 +13,10 @@ BackupController={{ backup_controller_ingress_address }}
 BackupAddr={{ backup_controller_ingress_address }}
 {% endif %}
 
+{% if configless %}
+SlurmctldParameters=enable_configless
+{% endif %}
+
 AuthType=auth/munge
 AuthInfo="socket={{ munge_socket }}"
 
