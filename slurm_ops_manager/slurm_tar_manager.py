@@ -286,3 +286,6 @@ class SlurmTarManager(SlurmOpsManagerBase):
             self._slurm_systemctl("enable")
         except subprocess.CalledProcessError as e:
             logger.error(f"Error setting up systemd - {e}")
+
+    def configure_munge_key(self, munge_key):
+        self._munge_key_path.write_text(munge_key)

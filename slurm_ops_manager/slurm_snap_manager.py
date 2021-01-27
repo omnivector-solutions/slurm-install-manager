@@ -117,11 +117,22 @@ class SlurmSnapManager(SlurmOpsManagerBase):
 
     def upgrade(self):
         """Run upgrade operations."""
-        logger.debug('upgrade(): entering...')
         # note: "snap refresh <foobar.snap>" does not work (it can
         # only refresh from the charm store (use "snap install"
         # instead).
         self.setup_system()
+
+    def configure_munge_key(self, munge_key):
+        """Configure the snap with the munge_key."""
+        try:
+            subprocess.call([
+                "snap",
+                "set",
+                "munge",
+                f"munge.key={munge_key}",
+            ])
+        except subprocess.CalledProcessError as e:
+            print(f"Trouble setting the munge_key - {e}")
 
     def _provision_snap_systemd_service_override_file(self):
         override_dir = Path(

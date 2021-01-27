@@ -218,6 +218,10 @@ class SlurmOpsManagerBase:
         """Preform upgrade-charm operations."""
         raise Exception("Inheriting object needs to define this method.")
 
+    def configure_munge_key(self):
+        """Configure the munge key."""
+        raise Exception("Inheriting object needs to define this method.")
+
     def setup_system(self):
         """Preform the install and setup operations."""
         raise Exception("Inheriting object needs to define this method.")

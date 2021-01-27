@@ -150,10 +150,8 @@ class SlurmManager(Object):
         # Set application version
         self._set_slurm_version()
 
-    def write_munge_key_and_restart_munged(self, munge_key):
-        """Write munge.key and restart munged."""
-        self._slurm_resource_manager.write_munge_key(munge_key)
-        self._slurm_resource_manager.restart_munged()
+    def configure_munge_key(self, munge_key):
+        self._slurm_resource_manager.configure_munge_key(munge_key)
 
     def render_config_and_restart(self, slurm_config) -> None:
         """Render the slurm.conf and munge key, restart slurm and munge."""
