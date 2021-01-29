@@ -145,7 +145,8 @@ class SlurmManager(Object):
         self._slurm_resource_manager.upgrade()
 
         if slurm_config is not None:
-            self.render_config_and_restart(slurm_config)
+            self.render_slurm_configs()
+            self.restart_slurm_component()
 
         # Set application version
         self._set_slurm_version()
@@ -158,7 +159,7 @@ class SlurmManager(Object):
             slurmctld_hostname
         )
 
-    def render_config(self, slurm_config) -> None:
+    def render_slurm_configs(self, slurm_config) -> None:
         """Render the slurm.conf and munge key, restart slurm and munge."""
         if not type(slurm_config) == dict:
             raise TypeError("Incorrect type for config.")
