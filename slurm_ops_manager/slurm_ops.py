@@ -158,7 +158,7 @@ class SlurmManager(Object):
             slurmctld_hostname
         )
 
-    def render_config_and_restart(self, slurm_config) -> None:
+    def render_config(self, slurm_config) -> None:
         """Render the slurm.conf and munge key, restart slurm and munge."""
         if not type(slurm_config) == dict:
             raise TypeError("Incorrect type for config.")
@@ -178,8 +178,6 @@ class SlurmManager(Object):
 
         # Write slurm.conf and restart the slurm component.
         self._slurm_resource_manager.write_slurm_config(slurm_config)
-        self._slurm_resource_manager.restart_slurm_component()
-        sleep(1)
 
     def _set_slurm_version(self):
         """Set the unit workload_version."""
