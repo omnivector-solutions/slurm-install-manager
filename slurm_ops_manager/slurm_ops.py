@@ -152,7 +152,8 @@ class SlurmManager(Object):
         self._set_slurm_version()
 
     def configure_munge_key(self, munge_key):
-        self._slurm_resource_manager.configure_munge_key(munge_key)
+        # self._slurm_resource_manager.configure_munge_key(munge_key)
+        self._slurm_resource_manager.write_munge_key(munge_key)
 
     def configure_slurmctld_hostname(self, slurmctld_hostname):
         self._slurm_resource_manager.configure_slurmctld_hostname(
