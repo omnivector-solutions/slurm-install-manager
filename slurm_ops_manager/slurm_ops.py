@@ -114,6 +114,10 @@ class SlurmManager(Object):
         """Return the munge key."""
         return self._slurm_resource_manager.get_munge_key()
 
+    def get_slurm_conf(self) -> str:
+        """Return the slurm.conf."""
+        return self._slurm_resource_manager.slurm_conf_path.read_text()
+
     def install(self) -> None:
         """Prepare the system for slurm."""
         # We need to ensure this function doesn't execute before
