@@ -331,3 +331,11 @@ class SlurmOpsManagerBase:
         except subprocess.CalledProcessError as e:
             logger.error(f"Error copying systemd - {e}")
             return -1
+
+    def scontrol(self, command):
+        """Run scontrol."""
+        try:
+            return subprocess.call(["/snap/bin/scontrol"]+command.split()])
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Error running scontrol - {e}")
+            return -1
