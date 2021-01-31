@@ -77,6 +77,8 @@ class SlurmOpsManagerBase:
         self._slurmctld_pid_file = self._slurm_pid_dir / 'slurmctld.pid'
         self._slurmdbd_pid_file = self._slurm_pid_dir / 'slurmdbd.pid'
 
+        self._slurmctld_parameters = ["enable_configless"]
+
         self._hostname = get_hostname()
         self._port = port_map[self._slurm_component]
 
@@ -275,6 +277,7 @@ class SlurmOpsManagerBase:
             'slurmdbd_pid_file': str(self._slurmdbd_pid_file),
             'slurmd_pid_file': str(self._slurmd_pid_file),
             'slurmctld_pid_file': str(self._slurmctld_pid_file),
+            'slurmctld_parameters': ",".join(self._slurmctld_parameters),
             'slurm_plugstack_conf': str(self._slurm_plugstack_conf),
             'slurm_user': str(self._slurm_user),
         }
@@ -290,6 +293,23 @@ class SlurmOpsManagerBase:
             raise FileNotFoundError(
                 "The slurm config template cannot be found."
             )
+
+        # Preprocess merging slurmctld_parameters if they exist in the context
+        context_slurmctld_parameters = context.get("slurmctld_parameters")
+        if context_slurmctld_parameters:
+
+            slurmctld_parameters = list(
+                set(
+                    common_config["slurmctld_parameters"].split(
+                        ","
+                    ) + context_slurmctld_parameters.split(",")
+                )
+            )
+
+            common_config["slurmctld_parameters"] = ",".join(
+                slurmctld_parameters
+            )
+            context.pop("slurmctld_parameters")
 
         rendered_template = Environment(
             loader=FileSystemLoader(str(self._template_dir))
