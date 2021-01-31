@@ -349,9 +349,9 @@ class SlurmOpsManagerBase:
         """Restart the munged process."""
         try:
             return subprocess.call([
-                "systemctl",
-                "restart",
+                "service",
                 self._munged_systemd_service,
+                "restart",
             ])
         except subprocess.CalledProcessError as e:
             logger.error(f"Error restarting munged - {e}")
