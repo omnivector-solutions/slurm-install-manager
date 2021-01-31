@@ -132,7 +132,7 @@ class SlurmOpsManagerBase:
             logger.error(f"Error running {operation} - {e}")
 
     @property
-    def slurm_bin_dir(self) -> Path:
+    def _slurm_bin_dir(self) -> Path:
         """Return the directory where the slurm bins live."""
         raise Exception("Inheriting object needs to define this property.")
 
