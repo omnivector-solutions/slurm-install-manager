@@ -19,6 +19,11 @@ class SlurmSnapManager(SlurmOpsManagerBase):
         super().__init__(component, resource_path)
 
     @property
+    def slurm_bin_dir(self) -> Path:
+        """Return the directory where the slurm bins live."""
+        return Path("/snap/bin")
+
+    @property
     def _slurm_conf_dir(self) -> Path:
         return Path("/var/snap/slurm/common/etc/slurm")
 

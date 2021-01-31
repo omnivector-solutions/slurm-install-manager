@@ -195,9 +195,9 @@ class SlurmManager(Object):
         """Restart slurm component."""
         self._slurm_resource_manager.restart_slurm_component()
 
-    def scontrol(self, command):
-        """Run scontrol."""
-        self._slurm_resource_manager.scontrol("reconfigure")
+    def slurm_cmd(self, command, arg_string):
+        """Run a slurm command."""
+        self._slurm_resource_manager.slurm_cmd(command, arg_string)
 
 
 def check_snapd():

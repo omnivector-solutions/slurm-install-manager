@@ -132,6 +132,11 @@ class SlurmOpsManagerBase:
             logger.error(f"Error running {operation} - {e}")
 
     @property
+    def slurm_bin_dir(self) -> Path:
+        """Return the directory where the slurm bins live."""
+        raise Exception("Inheriting object needs to define this property.")
+
+    @property
     def _slurm_systemd_service(self) -> str:
         raise Exception("Inheriting object needs to define this property.")
 
@@ -316,12 +321,12 @@ class SlurmOpsManagerBase:
         cgroup_conf_path.write_text(content)
 
     def get_munge_key(self) -> str:
-        """Read, encode, decode and return the munge key."""
+        """Read the bytes, encode to base64, decode to a string, return."""
         munge_key = self._munge_key_path.read_bytes()
         return b64encode(munge_key).decode()
 
     def restart_munged(self):
-        """Restart munged."""
+        """Restart the munged process."""
         try:
             return subprocess.call([
                 "systemctl",
@@ -329,13 +334,19 @@ class SlurmOpsManagerBase:
                 self._munged_systemd_service,
             ])
         except subprocess.CalledProcessError as e:
-            logger.error(f"Error copying systemd - {e}")
+            logger.error(f"Error restarting munged - {e}")
             return -1
 
-    def scontrol(self, command):
-        """Run scontrol."""
+    def slurm_cmd(self, command, arg_string):
+        """Run a slurm command."""
+        if command not in self._slurm_cmds:
+            logger.error(f"{command} is not a slurm command.")
+            return -1
+
         try:
-            return subprocess.call(["/snap/bin/scontrol"]+command.split())
+            return subprocess.call([
+                f"{self._slurm_bin_dir}/{command}"
+            ] + arg_string.split())
         except subprocess.CalledProcessError as e:
-            logger.error(f"Error running scontrol - {e}")
+            logger.error(f"Error running {command} - {e}")
             return -1
